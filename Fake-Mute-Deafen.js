@@ -15,6 +15,7 @@
     panel.style.color = "white";
     panel.style.fontFamily = "sans-serif";
     panel.style.boxShadow = "0 0 10px rgba(0,0,0,0.5)";
+    panel.style.cursor = "grab"; 
     panel.innerHTML = `
         <div style="font-weight:bold;margin-bottom:5px;">🎭 Fake Mute/Deafen</div>
         <button id="fakeMuteBtn">🎤 Mute: OFF</button>
@@ -40,6 +41,30 @@
         updateButtons();
     };
 
+    let isDragging = false;
+    let offsetX, offsetY;
+
+    panel.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        offsetX = e.clientX - panel.getBoundingClientRect().left;
+        offsetY = e.clientY - panel.getBoundingClientRect().top;
+        panel.style.cursor = "grabbing"; 
+    });
+
+    document.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+
+        panel.style.left = `${e.clientX - offsetX}px`;
+        panel.style.top = `${e.clientY - offsetY}px`;
+        panel.style.right = "auto"; 
+        panel.style.bottom = "auto";
+    });
+
+    document.addEventListener("mouseup", () => {
+        isDragging = false;
+        panel.style.cursor = "grab"
+    });
+
     WebSocket.prototype.send = function (data) {
         try {
             if (typeof data === "string") {
@@ -52,11 +77,11 @@
                         json.d.self_deaf = spoofDeafen;
                     }
                     data = JSON.stringify(json);
-                    console.log("[FakeMuteDeafen] send:", data);
+                    console.log("[FakeMuteDeafen] Sending spoofed data:", data);
                 }
             }
         } catch (err) {
-            console.warn("[FakeMuteDeafen] Packages cannot be faked:", err);
+            console.warn("[FakeMuteDeafen] Failed to spoof packet:", err);
         }
 
         return originalSend.call(this, data);
