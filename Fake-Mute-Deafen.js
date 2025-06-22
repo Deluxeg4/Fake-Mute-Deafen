@@ -17,7 +17,7 @@
     panel.style.boxShadow = "0 0 10px rgba(0,0,0,0.5)";
     panel.style.cursor = "grab"; 
     panel.innerHTML = `
-        <div style="font-weight:bold;margin-bottom:5px;">🎭 Fake Mute/Deafen</div>
+        <div style="font-weight:bold;margin-bottom:5px;">Fake Mute/Deafen</div>
         <button id="fakeMuteBtn">🎤 Mute: OFF</button>
         <button id="fakeDeafenBtn">🎧 Deafen: OFF</button>
     `;
